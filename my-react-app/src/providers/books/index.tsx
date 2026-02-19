@@ -9,6 +9,15 @@ type OpenLibrarySearchResponse = {
   docs?: IOpenLibraryDoc[];
 };
 
+const getCoverUrl = (coverId?: number) => {
+  if(!coverId) return undefined;
+
+  const base = import.meta.env.VITE_OPEN_LIBRARY_COVERS_BASE_URL;
+  const size = import.meta.env.VITE_OPEN_LIBRARY_COVER_SIZE;
+
+  return `${base}/b/id/${coverId}-${size}.jpg`;
+}
+
 const mapDocToBook = (doc: IOpenLibraryDoc): IBook | null => {
   const key = doc.key;
   const title = doc.title;
@@ -20,6 +29,7 @@ const mapDocToBook = (doc: IOpenLibraryDoc): IBook | null => {
     title,
     authorName: doc.author_name?.[0] ?? "Unknown author",
     coverId: doc.cover_i,
+    coverUrl: getCoverUrl(doc.cover_i),
   };
 };
 
@@ -27,24 +37,25 @@ export const BooksProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(BooksReducer, INITIAL_STATE);
   const instance = getAxiosInstance();
 
-  const searchBooks = async (query: string) => {
+  const searchBooks = async (query: string, page: number=1) => {
     const q = String(query ?? "").trim();
     if (!q) {
       dispatch(booksClear());
       return;
     }
 
-    dispatch(booksSearchPending(q));
-
     const endpoint = import.meta.env.VITE_OPEN_LIBRARY_SEARCH_ENDPOINT;
     const limit = Number(import.meta.env.VITE_OPEN_LIBRARY_LIMIT ?? 20);
 
-    const fields = "key,title,author_name";
+    dispatch(booksSearchPending({ query: q, page, limit }));
+
+    const fields = "key,title,author_name,cover_i";
 
     await instance
       .get<OpenLibrarySearchResponse>(endpoint, {
         params: {
           q,
+          page,
           limit,
           fields,
         },
@@ -61,6 +72,8 @@ export const BooksProvider = ({ children }: { children: React.ReactNode }) => {
             query: q,
             total: data.numFound ?? books.length,
             books,
+            page,
+            limit,
           }),
         );
       })
@@ -70,6 +83,8 @@ export const BooksProvider = ({ children }: { children: React.ReactNode }) => {
           booksSearchError({
             query: q,
             message: "Failed to fetch books",
+            page,
+            limit,  
           }),
         );
       });

@@ -8,32 +8,38 @@ export enum BooksActionEnums {
   clear = "BOOKS_CLEAR",
 }
 
-export const booksSearchPending = createAction<IBooksStateContext, string>(
+export const booksSearchPending = createAction<IBooksStateContext, { query: string; page: number; limit: number}>(
   BooksActionEnums.searchPending,
-  (query) => ({
+  ({ query, page, limit }) => ({
     ...INITIAL_STATE,
     isPending: true,
     query,
+    page,
+    limit,
   }),
 );
 
 export const booksSearchSuccess = createAction<
   IBooksStateContext,
-  { query: string; total: number; books: IBook[] }
->(BooksActionEnums.searchSuccess, ({ query, total, books }) => ({
+  { query: string; total: number; books: IBook[], page: number; limit: number }
+>(BooksActionEnums.searchSuccess, ({ query, total, books, page, limit }) => ({
   ...INITIAL_STATE,
   isSuccess: true,
   query,
   total,
+  page,
+  limit,
   books,
 }));
 
-export const booksSearchError = createAction<IBooksStateContext, { query: string; message: string }>(
+export const booksSearchError = createAction<IBooksStateContext, { query: string; message: string; page: number; limit: number }>(
   BooksActionEnums.searchError,
-  ({ query, message }) => ({
+  ({ query, message, page, limit }) => ({
     ...INITIAL_STATE,
     isError: true,
     query,
+    page,
+    limit,
     errorMessage: message,
   }),
 );

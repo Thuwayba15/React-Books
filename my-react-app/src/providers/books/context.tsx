@@ -12,6 +12,7 @@ export interface IBook {
   title: string;
   authorName: string;
   coverId?: number;
+  coverUrl?: string;
 }
 
 export interface IBooksStateContext {
@@ -24,10 +25,13 @@ export interface IBooksStateContext {
 
   books: IBook[];
   errorMessage?: string;
+
+  page: number;
+  limit: number;
 }
 
 export interface IBooksActionContext {
-  searchBooks: (query: string) => void;
+  searchBooks: (query: string, page?: number) => void;
   clearSearch: () => void;
 }
 
@@ -41,6 +45,8 @@ export const INITIAL_STATE: IBooksStateContext = {
   total: 0,
   books: [],
   errorMessage: undefined,
+  page: 1,
+  limit: 12,
 };
 
 export const BooksStateContext = createContext<IBooksStateContext>(INITIAL_STATE);
