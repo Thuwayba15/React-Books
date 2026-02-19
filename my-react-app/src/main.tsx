@@ -7,13 +7,16 @@ import App from './App.tsx'
 
 import { AuthProvider } from "./providers/auth";
 import { BooksProvider } from "./providers/books";
+import { WishlistProvider } from "./providers/wishlist";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
         <BooksProvider>
-          <App />
+          <WishlistProvider>
+            <App />
+          </WishlistProvider>
         </BooksProvider>
       </AuthProvider>
     </BrowserRouter>

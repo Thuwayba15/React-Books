@@ -1,11 +1,14 @@
 import { Alert, Card, Input, Typography, Row, Col, Space, Spin, Image, Pagination } from "antd";
 import { useBooksActions, useBooksState } from "../../providers/books";
+import { useWishlistActions } from "../../providers/wishlist";
 
 const { Title, Text } = Typography;
+
 
 export const Home = () => {
     const {searchBooks} = useBooksActions();
     const { books, isPending, isError, errorMessage, query, total, page, limit} = useBooksState();
+    const { addToWishlist } = useWishlistActions();
 
     return (
     <Space orientation="vertical" size="large" style={{ width: "100%" }}>
@@ -31,7 +34,13 @@ export const Home = () => {
         <Row gutter={[16, 16]}>
           {books.map((b) => (
             <Col key={b.key} xs={24} sm={12} md={8}>
-              <Card hoverable>
+              <Card hoverable  onClick={() =>
+                    addToWishlist({
+                      key: b.key,
+                      title: b.title,
+                      authorName: b.authorName,
+                    })
+                  }>
                   <div style={{ display: "flex", gap: 12 }}>
                     <Image
                       src={b.coverUrl}
