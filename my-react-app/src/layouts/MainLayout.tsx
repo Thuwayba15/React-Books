@@ -1,22 +1,25 @@
-import { Layout, Menu } from 'antd';
-import { BookOutlined, CompassOutlined, LoginOutlined } from "@ant-design/icons";
+import { Layout, Menu, Card, Typography, Empty } from "antd";
+import { BookOutlined, CompassOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useStyles } from "./style";
 
 const { Header, Content } = Layout;
+const { Text } = Typography;
 
 export const MainLayout = () => {
     const navigate = useNavigate();
     const location = useLocation();
-
+    const { styles } = useStyles();
+    
     const selectedKey =
         location.pathname === "/something-new"
         ? "/something-new"
-        : location.pathname === "/"
-            ? "/"
-            : "";
+        : location.pathname === "/home"
+            ? "/home"
+            : "/home";
 
     return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout className={styles.shell}>
       <Header style={{ display: "flex", alignItems: "center" }}>
         <div style={{ color: "white", fontWeight: 700, marginRight: 20 }}>
           BookShelf
@@ -28,7 +31,7 @@ export const MainLayout = () => {
           selectedKeys={[selectedKey]}
           items={[
             { 
-                key: "/", 
+                key: "/home", 
                 icon: <BookOutlined />, 
                 label: "Home" },
             {
@@ -38,7 +41,7 @@ export const MainLayout = () => {
             },
             { 
                 key: "/login", 
-                icon: <LoginOutlined />, 
+                icon: <LogoutOutlined />, 
                 label: "Logout" },
           ]}
           onClick={(e) => navigate(e.key)}
@@ -46,8 +49,26 @@ export const MainLayout = () => {
         />
       </Header>
 
-      <Content style={{ padding: 24 }}>
-        <Outlet />
+      <Content className={styles.body}>
+        <div className={styles.grid}>
+          <div className={styles.main}>
+            <Outlet />
+          </div>
+
+          {/* Right-side Wishlist (UI only) */}
+          <div className={styles.wishlist}>
+            <Card
+              title="Wishlist"
+            >
+              <Empty description="Wishlist is empty" />
+              <div style={{ marginTop: 12 }}>
+                <Text type="secondary">
+                  Later: add/remove books
+                </Text>
+              </div>
+            </Card>
+          </div>
+        </div>
       </Content>
     </Layout>
   );
