@@ -6,12 +6,15 @@ import './index.css'
 import App from './App.tsx'
 
 import { AuthProvider } from "./providers/auth";
+import { BooksProvider } from "./providers/books";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <BooksProvider>
+          <App />
+        </BooksProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>,

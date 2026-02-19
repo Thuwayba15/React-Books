@@ -1,18 +1,20 @@
-import { Card, Input, Typography, Row, Col, Space, Empty } from "antd";
+import { Alert, Card, Input, Typography, Row, Col, Space, Spin } from "antd";
+import { useBooksActions, useBooksState } from "../../providers/books";
 
 const { Title, Text } = Typography;
 
 export const Home = () => {
-    const fakeResults: Array<{ id: string; title: string; author: string }> = [];
+    const {searchBooks} = useBooksActions();
+    const { books, isPending, isError, errorMessage, query, total } = useBooksState();
 
     return (
-    <Space direction="vertical" size="large" style={{ width: "100%" }}>
+    <Space orientation="vertical" size="large" style={{ width: "100%" }}>
       <div>
         <Title level={2} style={{ margin: 0 }}>
-          Search Books
+          Search Books 
         </Title>
         <Text type="secondary">
-          Search
+          Results: {query ? `${total} found for "${query}"` : "Type a search term"}
         </Text>
       </div>
 
@@ -20,21 +22,19 @@ export const Home = () => {
         placeholder="Search by title, author, keyword..."
         enterButton="Search"
         size="large"
-        onSearch={() => {
-          /* no-op for now */
-        }}
+        onSearch={(value) => searchBooks(value)}
       />
 
-      {fakeResults.length === 0 ? (
-        <Card>
-          <Empty description="No results yet" />
-        </Card>
+      {isError && errorMessage && <Alert type="error" message={errorMessage} showIcon />}
+
+      {isPending ? (
+        <Card><Spin /></Card>
       ) : (
         <Row gutter={[16, 16]}>
-          {fakeResults.map((b) => (
-            <Col key={b.id} xs={24} sm={12} md={8} lg={6}>
+          {books.map((b) => (
+            <Col key={b.key} xs={24} sm={12} md={8}>
               <Card hoverable title={b.title}>
-                <Text type="secondary">{b.author}</Text>
+                <Text type="secondary">{b.authorName}</Text>
               </Card>
             </Col>
           ))}

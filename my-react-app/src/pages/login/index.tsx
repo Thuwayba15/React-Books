@@ -29,7 +29,7 @@ export const Login = () => {
       }}
     >
       <Card style={{ width: 380 }} >
-        <Space direction="vertical" size={8} style={{ width: "100%" }}>
+        <Space orientation="vertical" size={8} style={{ width: "100%" }}>
           <Title level={3} style={{ margin: 0 }}>Login</Title>
           <Text type="secondary">Default credentials: demo@user.com / demo123</Text>
 

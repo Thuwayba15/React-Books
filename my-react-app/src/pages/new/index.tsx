@@ -10,7 +10,7 @@ const mockBooks = [
 
 export const SomethingNew = () => {
     return (
-    <Space direction="vertical" size="large" style={{ width: "100%" }}>
+    <Space orientation="vertical" size="large" style={{ width: "100%" }}>
       <div>
         <Title level={2} style={{ margin: 0 }}>
           Something New
