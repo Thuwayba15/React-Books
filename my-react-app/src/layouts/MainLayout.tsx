@@ -2,6 +2,7 @@ import { Layout, Menu, Card, Typography, Empty } from "antd";
 import { BookOutlined, CompassOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useStyles } from "./style";
+import { useAuthActions } from "../providers/auth";
 
 const { Header, Content } = Layout;
 const { Text } = Typography;
@@ -10,6 +11,7 @@ export const MainLayout = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { styles } = useStyles();
+    const { logout } = useAuthActions();
     
     const selectedKey =
         location.pathname === "/something-new"
@@ -35,16 +37,23 @@ export const MainLayout = () => {
                 icon: <BookOutlined />, 
                 label: "Home" },
             {
-              key: "/something-new",
-              icon: <CompassOutlined />,
-              label: "Something New",
+                key: "/something-new",
+                icon: <CompassOutlined />,
+                label: "Something New",
             },
             { 
-                key: "/login", 
+                key: "/logout", 
                 icon: <LogoutOutlined />, 
                 label: "Logout" },
           ]}
-          onClick={(e) => navigate(e.key)}
+          onClick={(e) => {
+            if (e.key === "/logout") {
+                logout();
+                navigate("/login", { replace: true });
+                return;
+            }
+            navigate(e.key);
+          }}
           style={{ flex: 1 }}
         />
       </Header>
