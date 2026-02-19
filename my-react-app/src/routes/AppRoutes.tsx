@@ -3,6 +3,7 @@ import { MainLayout } from "../layouts/MainLayout";
 import { Login } from "../pages/login/index";
 import { Home } from "../pages/home/index";
 import { SomethingNew } from "../pages/new";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 export const AppRoutes = () => {
   return (
@@ -12,7 +13,13 @@ export const AppRoutes = () => {
 
         <Route path="/login" element={<Login />} />
 
-        <Route element={<MainLayout />}>
+        <Route  
+            element={
+            <ProtectedRoute>
+                <MainLayout />
+            </ProtectedRoute>
+            }
+        >
             <Route path="/home" element={<Home />} />
             <Route path="/something-new" element={<SomethingNew />} />
         </Route>
