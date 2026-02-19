@@ -39,7 +39,7 @@ export const MainLayout = () => {
             { 
                 key: "/login", 
                 icon: <LoginOutlined />, 
-                label: "Login" },
+                label: "Logout" },
           ]}
           onClick={(e) => navigate(e.key)}
           style={{ flex: 1 }}

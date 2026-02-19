@@ -1,8 +1,11 @@
 import { Card, Form, Input, Button, Typography } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
 export const Login = () => {
+    const navigate = useNavigate();
+
     return (
     <div
       style={{
@@ -29,7 +32,10 @@ export const Login = () => {
             <Input.Password placeholder="••••••••" />
           </Form.Item>
 
-          <Button type="primary" block>
+          <Button 
+            type="primary" 
+            block
+            onClick={() => navigate("/home")}>
             Sign in
           </Button>
         </Form>
