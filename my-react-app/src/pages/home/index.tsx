@@ -1,11 +1,12 @@
 import { Alert, Card, Input, Typography, Row, Col, Space, Spin, Image, Pagination } from "antd";
 import { useBooksActions, useBooksState } from "../../providers/books";
 import { useWishlistActions } from "../../providers/wishlist";
+import withAuthGuard from "../../hoc/withAuth";
 
 const { Title, Text } = Typography;
 
 
-export const Home = () => {
+const Home = () => {
     const {searchBooks} = useBooksActions();
     const { books, isPending, isError, errorMessage, query, total, page, limit} = useBooksState();
     const { addToWishlist } = useWishlistActions();
@@ -34,6 +35,7 @@ export const Home = () => {
         <Row gutter={[16, 16]}>
           {books.map((b) => (
             <Col key={b.key} xs={24} sm={12} md={8}>
+              {/* @ts-ignore */}
               <Card hoverable  onClick={() =>
                     addToWishlist({
                       key: b.key,
@@ -72,3 +74,5 @@ export const Home = () => {
     </Space>
   );
 }
+
+export default withAuthGuard(Home);

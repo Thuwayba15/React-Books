@@ -1,7 +1,5 @@
-import { Alert, Checkbox, Form, Input, Button, Card, Typography, Space } from "antd";
+import { Alert, Form, Input, Button, Card, Typography, Space } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { AuthActionContext } from "../../providers/auth/context";
 import { useEffect } from "react";
 import { useAuthActions, useAuthState } from "../../providers/auth/index";
 

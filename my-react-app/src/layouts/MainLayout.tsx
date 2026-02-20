@@ -4,11 +4,12 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useStyles } from "./style";
 import { useAuthActions } from "../providers/auth";
 import { useWishlistActions, useWishlistState } from "../providers/wishlist";
+import withAuthGuard from "../hoc/withAuth";
 
 const { Header, Content } = Layout;
 const { Text } = Typography;
 
-export const MainLayout = () => {
+const MainLayout = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { styles } = useStyles();
@@ -89,6 +90,7 @@ export const MainLayout = () => {
                             checkedChildren="Read"
                             unCheckedChildren="Unread"
                           />
+                          {/* @ts-ignore */}
                           <Button danger size="small" key="add" onClick={() => removeFromWishlist(item.key)}>
                             Remove
                           </Button>
@@ -121,3 +123,5 @@ export const MainLayout = () => {
     </Layout>
   );
 }
+
+export default withAuthGuard(MainLayout);
