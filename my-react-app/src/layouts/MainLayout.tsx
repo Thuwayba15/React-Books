@@ -1,17 +1,21 @@
-import { Layout, Menu, Card, Typography, Empty } from "antd";
+import { Layout, Menu, Card, Typography, Empty, Button, List, Space, Tag, Switch } from "antd";
 import { BookOutlined, CompassOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useStyles } from "./style";
 import { useAuthActions } from "../providers/auth";
+import { useWishlistActions, useWishlistState } from "../providers/wishlist";
+import withAuthGuard from "../hoc/withAuth";
 
 const { Header, Content } = Layout;
 const { Text } = Typography;
 
-export const MainLayout = () => {
+const MainLayout = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { styles } = useStyles();
     const { logout } = useAuthActions();
+    const { items } = useWishlistState();
+    const { removeFromWishlist, toggleRead } = useWishlistActions();
     
     const selectedKey =
         location.pathname === "/something-new"
@@ -69,10 +73,47 @@ export const MainLayout = () => {
             <Card
               title="Wishlist"
             >
-              <Empty description="Wishlist is empty" />
+              {!items.length ? (
+                <Empty description="Wishlist is empty" />
+              ) : (
+                <List className={styles.wish}
+                  itemLayout="vertical"
+                  dataSource={items}
+                  renderItem={(item) => (
+                    <List.Item
+                      key={item.key}
+                      actions={[
+                        <Space key="actions" size="middle">
+                          <Switch
+                            checked={item.isRead}
+                            onChange={() => toggleRead(item.key)}
+                            checkedChildren="Read"
+                            unCheckedChildren="Unread"
+                          />
+                          {/* @ts-ignore */}
+                          <Button danger size="small" key="add" onClick={() => removeFromWishlist(item.key)}>
+                            Remove
+                          </Button>
+                        </Space>,
+                      ]}
+                    >
+                      <List.Item.Meta
+                        title={
+                          <Space>
+                            <span style={{ fontWeight: 600 }}>{item.title}</span>
+                            {item.isRead ? <Tag color="green">Read</Tag> : <Tag>Unread</Tag>}
+                          </Space>
+                        }
+                        description={item.authorName}
+                      />
+                    </List.Item>
+                  )}
+                />
+              )}
+
               <div style={{ marginTop: 12 }}>
                 <Text type="secondary">
-                  Later: add/remove books
+                  Tip: click a book card to add it here.
                 </Text>
               </div>
             </Card>
@@ -82,3 +123,5 @@ export const MainLayout = () => {
     </Layout>
   );
 }
+
+export default withAuthGuard(MainLayout);

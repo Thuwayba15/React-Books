@@ -1,4 +1,5 @@
 import { Card, Typography, Space } from "antd";
+import withAuthGuard from "../../hoc/withAuth";
 
 const { Title, Text } = Typography;
 
@@ -8,9 +9,9 @@ const mockBooks = [
   { id: "3", title: "Dune", author: "Frank Herbert" },
 ];
 
-export const SomethingNew = () => {
+const SomethingNew = () => {
     return (
-    <Space direction="vertical" size="large" style={{ width: "100%" }}>
+    <Space orientation="vertical" size="large" style={{ width: "100%" }}>
       <div>
         <Title level={2} style={{ margin: 0 }}>
           Something New
@@ -42,3 +43,5 @@ export const SomethingNew = () => {
     </Space>
   );
 }
+
+export default withAuthGuard(SomethingNew);

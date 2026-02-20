@@ -1,7 +1,5 @@
-import { Alert, Checkbox, Form, Input, Button, Card, Typography, Space } from "antd";
+import { Alert, Form, Input, Button, Card, Typography, Space } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { AuthActionContext } from "../../providers/auth/context";
 import { useEffect } from "react";
 import { useAuthActions, useAuthState } from "../../providers/auth/index";
 
@@ -29,7 +27,7 @@ export const Login = () => {
       }}
     >
       <Card style={{ width: 380 }} >
-        <Space direction="vertical" size={8} style={{ width: "100%" }}>
+        <Space orientation="vertical" size={8} style={{ width: "100%" }}>
           <Title level={3} style={{ margin: 0 }}>Login</Title>
           <Text type="secondary">Default credentials: demo@user.com / demo123</Text>
 

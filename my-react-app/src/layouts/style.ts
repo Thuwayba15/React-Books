@@ -22,6 +22,11 @@ export const useStyles = createStyles(({css}) => ({
 
   wishlist: css`
     position: sticky;
-    top: 24px;
+    align-self: center;
+    background-color: #f0f0f0;
+  `,
+
+  wish: css`
+    background-color: #e2fefa;
   `,
 }))

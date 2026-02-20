@@ -1,8 +1,8 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import { MainLayout } from "../layouts/MainLayout";
+import MainLayout  from "../layouts/MainLayout";
 import { Login } from "../pages/login/index";
-import { Home } from "../pages/home/index";
-import { SomethingNew } from "../pages/new";
+import Home from "../pages/home/index";
+import SomethingNew  from "../pages/new";
 import { ProtectedRoute } from "./ProtectedRoute";
 
 export const AppRoutes = () => {

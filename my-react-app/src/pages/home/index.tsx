@@ -1,45 +1,70 @@
-import { Card, Input, Typography, Row, Col, Space, Empty } from "antd";
+import { Alert, Card, Input, Typography, Row, Col, Space, Spin, Pagination } from "antd";
+import { BookCard } from "../../components/bookcard/BookCard"
+import { useBooksActions, useBooksState } from "../../providers/books";
+import { useWishlistActions } from "../../providers/wishlist";
+import withAuthGuard from "../../hoc/withAuth";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
-export const Home = () => {
-    const fakeResults: Array<{ id: string; title: string; author: string }> = [];
+
+const Home = () => {
+    const {searchBooks} = useBooksActions();
+    const { books, isPending, isError, errorMessage, query, total, page, limit} = useBooksState();
+    const { addToWishlist } = useWishlistActions();
 
     return (
-    <Space direction="vertical" size="large" style={{ width: "100%" }}>
+    <Space orientation="vertical" size="large" style={{ width: "100%" }}>
       <div>
         <Title level={2} style={{ margin: 0 }}>
-          Search Books
+          Search Books 
         </Title>
-        <Text type="secondary">
-          Search
-        </Text>
       </div>
 
       <Input.Search
         placeholder="Search by title, author, keyword..."
         enterButton="Search"
         size="large"
-        onSearch={() => {
-          /* no-op for now */
-        }}
+        onSearch={(value) => searchBooks(value)}
       />
 
-      {fakeResults.length === 0 ? (
-        <Card>
-          <Empty description="No results yet" />
-        </Card>
+      {isError && errorMessage && <Alert type="error" title={errorMessage} showIcon />}
+
+      {isPending ? (
+        <Card><Spin /></Card>
       ) : (
+        <>
         <Row gutter={[16, 16]}>
-          {fakeResults.map((b) => (
-            <Col key={b.id} xs={24} sm={12} md={8} lg={6}>
-              <Card hoverable title={b.title}>
-                <Text type="secondary">{b.author}</Text>
-              </Card>
+          {books.map((b) => (
+            <Col key={b.key} xs={24} sm={12} md={8}>
+              <BookCard
+                keyId={b.key}
+                title={b.title}
+                authorName={b.authorName}
+                coverUrl={b.coverUrl || ""}
+                onAddToWishlist={() =>
+                  addToWishlist({
+                    key: b.key,
+                    title: b.title,
+                    authorName: b.authorName,
+                  })
+                }
+              />
             </Col>
           ))}
         </Row>
+        {query && total > 0 && (
+            <Pagination
+              current={page}
+              pageSize={limit}
+              total={total}
+              showSizeChanger={false}
+              onChange={(nextPage) => searchBooks(query, nextPage)}
+            />
+          )}
+        </>
       )}
     </Space>
   );
 }
+
+export default withAuthGuard(Home);
