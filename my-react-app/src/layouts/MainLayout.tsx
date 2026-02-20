@@ -76,7 +76,7 @@ const MainLayout = () => {
               {!items.length ? (
                 <Empty description="Wishlist is empty" />
               ) : (
-                <List
+                <List className={styles.wish}
                   itemLayout="vertical"
                   dataSource={items}
                   renderItem={(item) => (

@@ -1,9 +1,10 @@
-import { Alert, Card, Input, Typography, Row, Col, Space, Spin, Image, Pagination } from "antd";
+import { Alert, Card, Input, Typography, Row, Col, Space, Spin, Pagination } from "antd";
+import { BookCard } from "../../components/bookcard/BookCard"
 import { useBooksActions, useBooksState } from "../../providers/books";
 import { useWishlistActions } from "../../providers/wishlist";
 import withAuthGuard from "../../hoc/withAuth";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 
 const Home = () => {
@@ -35,28 +36,19 @@ const Home = () => {
         <Row gutter={[16, 16]}>
           {books.map((b) => (
             <Col key={b.key} xs={24} sm={12} md={8}>
-              {/* @ts-ignore */}
-              <Card hoverable  onClick={() =>
-                    addToWishlist({
-                      key: b.key,
-                      title: b.title,
-                      authorName: b.authorName,
-                    })
-                  }>
-                  <div style={{ display: "flex", gap: 12 }}>
-                    <Image
-                      src={b.coverUrl}
-                      width={70}
-                      height={100}
-                      style={{ objectFit: "cover", borderRadius: 6 }}
-                      preview={true}
-                    />
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ fontWeight: 700, marginBottom: 6 }}>{b.title}</div>
-                      <Text type="secondary">{b.authorName}</Text>
-                    </div>
-                  </div>
-                </Card>
+              <BookCard
+                keyId={b.key}
+                title={b.title}
+                authorName={b.authorName}
+                coverUrl={b.coverUrl || ""}
+                onAddToWishlist={() =>
+                  addToWishlist({
+                    key: b.key,
+                    title: b.title,
+                    authorName: b.authorName,
+                  })
+                }
+              />
             </Col>
           ))}
         </Row>
